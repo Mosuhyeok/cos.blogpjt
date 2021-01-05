@@ -1,11 +1,21 @@
 package com.cos.blogproject.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+//@DynamicInsert 이건 insert 할 때 null인 필드를 제외시켜줌 그래서 columDefault 에서 지정한 값으로 들어가지만 잘 안쓰임
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 public class User {
     @Id
@@ -23,8 +33,10 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @ColumnDefault("'user'")    //defalut값 들어가는데 "'이름'" 이런 포멧
-    private String role; //Eunum을 쓰는게 좋다
+    //DB는 RoleType이라는 내가 만든 자바 오브젝트가 없으니 알아먹게 어노테이션을 붙여줘야함
+
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
     @CreationTimestamp // 이 어노테이션으로 시간이 자동으로 입력된다.
     private Timestamp createDate;
 }
